@@ -20,12 +20,16 @@ pipeline {
         stage('Build React App') {
             steps {
                 sh 'npm run build'
+                // Check the output directory (use 'build/' or 'dist/' based on your setup)
+                sh 'ls -l'  // List files in the current directory to check if build or dist folder exists
+                sh 'ls -l dist/' // Verify if dist/ exists, if that's your output folder
             }
         }
         stage('Deploy to S3') {
             steps {
                 withAWS(region: "${env.AWS_REGION}", credentials: 'aws-credentials') {
-                    sh 'aws s3 sync build/ s3://react-projectt --delete'
+                    // Replace dist/ with build/ or the correct output directory
+                    sh 'aws s3 sync dist/ s3://react-projectt --delete'  // Update to your correct directory
                 }
             }
         }
@@ -38,4 +42,4 @@ pipeline {
             echo 'Deployment Failed!'
         }
     }
-}  
+}
