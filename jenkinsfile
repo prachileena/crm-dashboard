@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    environment {
+        NODE_HOME = tool 'NodeJs' // Matches the name you set in Global Tool Configuration
+        PATH = "${NODE_HOME}/bin:${env.PATH}"
+        AWS_REGION = 'ap-south-1' // Replace with your AWS region
+        S3_BUCKET = 'react-projectt' // Replace with your bucket name
+    }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/username/repo-name.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Build React App') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+        stage('Deploy to S3') {
+            steps {
+                withAWS(region: "${env.AWS_REGION}", credentials: 'aws-credentials') {
+                    sh 'aws s3 sync build/ s3://${S3_BUCKET} --delete'
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Deployment Successful!'
+        }
+        failure {
+            echo 'Deployment Failed!'
+        }
+    }
+}
