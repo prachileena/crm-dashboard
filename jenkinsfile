@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/username/repo-name.git'
+               git branch: 'main', url: 'https://github.com/prachileena/crm-dashboard.git'
             }
         }
         stage('Install Dependencies') {
@@ -25,7 +25,7 @@ pipeline {
         stage('Deploy to S3') {
             steps {
                 withAWS(region: "${env.AWS_REGION}", credentials: 'aws-credentials') {
-                    sh 'aws s3 sync build/ s3://${S3_BUCKET} --delete'
+                    sh 'aws s3 sync build/ s3://react-projectt --delete'
                 }
             }
         }
