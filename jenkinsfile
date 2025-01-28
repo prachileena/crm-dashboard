@@ -29,7 +29,7 @@ pipeline {
             steps {
                 withAWS(region: "${env.AWS_REGION}", credentials: 'aws-credentials') {
                     // Replace dist/ with build/ or the correct output directory
-                    sh 'aws s3 sync dist/ s3://react-projectt --delete'  // Update to your correct directory
+                    sh 'aws s3 sync build/ s3://react-projectt --delete'  // Update to your correct directory
                 }
             }
         }
