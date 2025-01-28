@@ -10,16 +10,19 @@ pipeline {
         stage('Checkout Code') {
             steps {
                git branch: 'main', url: 'https://github.com/prachileena/crm-dashboard.git'
+               sh 'pwd && ls -l' // Debugging workspace and folder structure
             }
         }
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
+                sh 'ls -l' // Verify node_modules installed
             }
         }
         stage('Build React App') {
             steps {
                 sh 'npm run build'
+                sh 'ls -l build/' // Verify the build directory exists
             }
         }
         stage('Deploy to S3') {
